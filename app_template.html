@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="is">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Tækifæravaktin</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#f2f5f4; --surface:#ffffff; --surface-2:#e9eeec; --ink:#16201e; --muted:#5c6b67;
+  --line:#d3dcd9; --accent:#0f6e5a; --accent-ink:#ffffff; --accent-soft:#dcefe9;
+  --good:#1f7a4d; --good-soft:#d9f0e2; --warn:#b7791f; --warn-soft:#f7ebcf;
+  --bad:#b4372e; --bad-soft:#f6dcd9; --neutral-soft:#e6e9e8;
+  --shadow:0 1px 2px rgba(22,32,30,.06),0 6px 18px rgba(22,32,30,.06); --radius:10px;
+}
+@media (prefers-color-scheme: dark){:root{
+  --bg:#0f1514; --surface:#171f1d; --surface-2:#1f2926; --ink:#e6ecea; --muted:#98a8a3;
+  --line:#2b3733; --accent:#4fb797; --accent-ink:#0b1412; --accent-soft:#173a31;
+  --good:#5cc48a; --good-soft:#163526; --warn:#e0a83d; --warn-soft:#3a2d12;
+  --bad:#e8776d; --bad-soft:#3e1b18; --neutral-soft:#26302d;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 18px rgba(0,0,0,.25);}}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 "IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;margin:0}
+.wrap{max-width:980px;margin:0 auto;padding-inline:16px;padding-block:20px 60px}
+h1,h2,h3{font-family:"IBM Plex Sans Condensed","IBM Plex Sans",system-ui,sans-serif;text-wrap:balance;margin:0}
+.num{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums}
+a{color:var(--accent)}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+header.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px 24px;margin-bottom:14px}
+header.top h1{font-size:34px;font-weight:600;letter-spacing:-.01em;line-height:1.05}
+header.top .sub{color:var(--muted);font-size:14px;margin-top:4px}
+.stats{display:flex;gap:10px;flex-wrap:wrap}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:8px 14px;min-width:96px}
+.stat .k{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.stat .v{font-size:22px;font-weight:500;line-height:1.1}
+.who{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:10px 14px;margin-bottom:14px}
+.who label{color:var(--muted);font-size:13px}
+.who select{font:inherit;padding:6px 10px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+.who .sync{margin-left:auto;font-size:12px;color:var(--muted)}
+.who .sync.ok{color:var(--good)}.who .sync.err{color:var(--bad)}
+.notice{background:var(--warn-soft);border:1px solid var(--line);border-radius:var(--radius);padding:10px 14px;margin-bottom:14px;font-size:14px}
+.deadlines{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:12px 16px;margin-bottom:16px}
+.deadlines h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600;margin-bottom:6px}
+.deadlines ul{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.deadlines li{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.deadlines li .d{min-width:88px}
+.deadlines a{color:inherit;text-decoration:none;border-bottom:1px solid var(--line)}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;align-items:center}
+.filters .grp{display:flex;flex-wrap:wrap;gap:6px}
+.filters .sep{width:1px;height:22px;background:var(--line);margin:0 4px}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:4px 12px;font-size:13px;color:var(--muted)}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.list{display:grid;gap:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px 18px;position:relative;overflow:hidden}
+.card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--neutral-soft)}
+.card[data-verdict="ahugavert"]::before{background:var(--good)}
+.card[data-verdict="skoda"]::before{background:var(--warn)}
+.card[data-verdict="ekki"]::before{background:var(--muted);opacity:.5}
+.card[data-verdict="ekki"] .body{opacity:.75}
+.card .head{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:baseline;justify-content:space-between}
+.card h3{font-size:20px;font-weight:600;line-height:1.2}
+.tags{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.tag{font-size:11px;text-transform:uppercase;letter-spacing:.06em;padding:2px 8px;border-radius:4px;background:var(--surface-2);color:var(--muted);white-space:nowrap}
+.tag.cat{background:var(--accent-soft);color:var(--accent)}
+.tag.new{background:var(--accent);color:var(--accent-ink)}
+.tag.closed{background:var(--neutral-soft)}
+.score{display:inline-flex;gap:3px;align-items:center}
+.score i{width:8px;height:8px;border-radius:50%;background:var(--line);display:inline-block}
+.score i.on{background:var(--accent)}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px 16px;margin:12px 0 10px;padding:10px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.fact .k{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+.fact .v{font-size:15px}
+.fact .v.warnv{color:var(--bad);font-weight:600}
+.memo{display:grid;gap:8px;max-width:68ch}
+.memo p{margin:0}
+.memo p b{font-weight:600}
+.verdict-line{margin-top:8px;font-weight:600}
+.verdict-line.straks{color:var(--good)}.verdict-line.timi{color:var(--warn)}.verdict-line.ekki{color:var(--muted)}
+.more{color:var(--muted);font-size:13px;padding:2px 0;text-decoration:underline;text-underline-offset:3px}
+.sources{margin-top:10px;display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px}
+.sources a{text-decoration:none;border-bottom:1px solid var(--line)}
+.meta{color:var(--muted);font-size:12px;margin-top:8px}
+.mark{margin-top:14px;padding-top:12px;border-top:1px dashed var(--line);display:grid;gap:8px}
+.mark .cur{font-size:13px}
+.mark .cur b{font-weight:600}
+.mark .btns{display:flex;flex-wrap:wrap;gap:8px}
+.vbtn{border:1px solid var(--line);border-radius:8px;padding:7px 14px;font-size:14px;font-weight:500;background:var(--surface)}
+.vbtn.ahugavert[aria-pressed="true"]{background:var(--good-soft);border-color:var(--good);color:var(--good)}
+.vbtn.skoda[aria-pressed="true"]{background:var(--warn-soft);border-color:var(--warn);color:var(--warn)}
+.vbtn.ekki[aria-pressed="true"]{background:var(--neutral-soft);border-color:var(--muted);color:var(--muted)}
+.mark .row{display:flex;gap:8px;flex-wrap:wrap}
+.mark input{flex:1 1 220px;border:1px solid var(--line);border-radius:8px;padding:7px 10px;font:inherit;background:var(--surface);color:var(--ink);min-width:0}
+.mark .save{background:var(--accent);color:var(--accent-ink);border-radius:8px;padding:7px 16px;font-weight:600}
+.mark .save[disabled]{opacity:.45;cursor:default}
+.mark .state{font-size:12px;color:var(--muted);min-height:1em}
+.mark .state.ok{color:var(--good)}.mark .state.err{color:var(--bad)}
+.hist{font-size:12.5px;color:var(--muted);display:grid;gap:3px;margin-top:2px}
+.hist .h b{color:var(--ink);font-weight:500}
+.empty{color:var(--muted);text-align:center;padding:40px 0}
+footer{color:var(--muted);font-size:12px;margin-top:30px;max-width:68ch}
+footer button{text-decoration:underline;color:var(--muted);padding:0}
+@media (max-width:520px){header.top h1{font-size:28px}.card{padding:14px}.card h3{font-size:18px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>Tækifæravaktin</h1>
+      <div class="sub">Tækifæri í fasteignaþróun og söluleiðir fyrir VBC-einingar · uppfært <span id="gen"></span></div>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="k">Mál</div><div class="v num" id="st-total">–</div></div>
+      <div class="stat"><div class="k">Ómerkt</div><div class="v num" id="st-open">–</div></div>
+      <div class="stat"><div class="k">Áhugavert</div><div class="v num" id="st-yes">–</div></div>
+      <div class="stat"><div class="k">Frestir &lt; 30 d</div><div class="v num" id="st-dl">–</div></div>
+    </div>
+  </header>
+
+  <div class="who">
+    <label for="who">Ég er</label>
+    <select id="who"><option value="">veldu nafn…</option></select>
+    <span class="sync" id="sync">Sæki merkingar…</span>
+  </div>
+  <div class="notice" id="notice" hidden></div>
+
+  <section class="deadlines" id="deadlines" hidden>
+    <h2>Frestir sem nálgast</h2>
+    <ul id="dl-list"></ul>
+  </section>
+
+  <div class="filters" role="toolbar" aria-label="Síur">
+    <div class="grp" id="f-verdict">
+      <button class="chip" data-f="all" aria-pressed="true">Öll</button>
+      <button class="chip" data-f="unmarked">Ómerkt</button>
+      <button class="chip" data-f="ahugavert">Áhugavert</button>
+      <button class="chip" data-f="skoda">Í skoðun</button>
+      <button class="chip" data-f="ekki">Ekki áhugi</button>
+    </div>
+    <div class="sep"></div>
+    <div class="grp" id="f-cat">
+      <button class="chip" data-c="all" aria-pressed="true">Allar gerðir</button>
+      <button class="chip" data-c="opinber_eftirspurn">Opinber eftirspurn</button>
+      <button class="chip" data-c="stor_eign">Stór eign</button>
+      <button class="chip" data-c="throunarrettur">Þróunarréttur</button>
+      <button class="chip" data-c="umbreyting">Umbreyting</button>
+      <button class="chip" data-c="soluleid">Söluleið VBC</button>
+    </div>
+  </div>
+
+  <div class="list" id="list"></div>
+
+  <footer>
+    Síðasta vistun gildir sem staða málsins; hver vistun er þó geymd í sögu málsins með nafni og dagsetningu, svo rök tapast ekki þótt staða breytist.
+    Vaktin les merkingar allra í hverri keyrslu og lærir af þeim. ·
+    <button id="lock">Læsa þessu tæki</button>
+  </footer>
+</div>
+
+<script id="content" type="application/json">__CONTENT_JSON__</script>
+<script>
+(function(){
+  "use strict";
+  const C=JSON.parse(document.getElementById("content").textContent);
+  const ITEMS=C.items||[], CFG=C.config||{}, NAMES=CFG.names||["Gunnar","Björn","Sveinn"];
+  const CATS={opinber_eftirspurn:"Opinber eftirspurn",stor_eign:"Stór eign",throunarrettur:"Þróunarréttur",umbreyting:"Umbreyting",soluleid:"Söluleið VBC",annad:"Annað"};
+  const VLABEL={ahugavert:"Áhugavert",skoda:"Í skoðun",ekki:"Ekki áhugi"};
+  const state={verdicts:{},history:[],drafts:new Map(),fV:"all",fC:"all",expanded:new Set(),who:""};
+  const $=(s,el)=>(el||document).querySelector(s);
+  const el=(tag,cls,text)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e;};
+  const fmt=n=>n==null||n===""?"–":Number(n).toLocaleString("is-IS",{maximumFractionDigits:1});
+  const safeUrl=u=>{try{const x=new URL(u);return /^https?:$/.test(x.protocol)?x.href:null}catch(e){return null}};
+  const today=new Date();today.setHours(0,0,0,0);
+  const daysTo=d=>{if(!d||!/^\d{4}-\d{2}-\d{2}/.test(d))return null;const t=new Date(d.slice(0,10)+"T00:00:00");return Math.round((t-today)/86400000);};
+  const fmtDate=d=>{if(!d)return"–";const m=String(d).match(/^(\d{4})-(\d{2})-(\d{2})/);if(!m)return d;return `${+m[3]}.${+m[2]}.${m[1]}`;};
+  $("#gen").textContent=fmtDate(C.generated||"");
+
+  // ---- who am I
+  const whoSel=$("#who");NAMES.forEach(n=>{const o=el("option",null,n);o.value=n;whoSel.appendChild(o);});
+  try{state.who=localStorage.getItem("vaktin_who")||"";}catch(e){}
+  whoSel.value=state.who;
+  whoSel.addEventListener("change",()=>{state.who=whoSel.value;try{localStorage.setItem("vaktin_who",state.who);}catch(e){}render();});
+  $("#lock").addEventListener("click",()=>{try{localStorage.removeItem("vaktin_pass");localStorage.removeItem("vaktin_who");}catch(e){}location.reload();});
+
+  // ---- backend
+  const API=CFG.url||"", KEY=CFG.token||"";
+  const sync=$("#sync");
+  function setSync(cls,msg){sync.className="sync "+cls;sync.textContent=msg;}
+  async function loadVerdicts(){
+    if(!API){setSync("err","Bakendi ekki tengdur enn – merkingar vistast ekki");return;}
+    try{
+      const r=await fetch(API+"?action=get&k="+encodeURIComponent(KEY)+"&t="+Date.now(),{cache:"no-store"});
+      const j=await r.json();
+      if(j.status!=="ok")throw new Error(j.status);
+      state.verdicts=j.verdicts||{};state.history=j.history||[];
+      setSync("ok","Merkingar samstilltar "+new Date().toLocaleTimeString("is-IS",{hour:"2-digit",minute:"2-digit"}));
+      render();
+    }catch(e){setSync("err","Náði ekki í merkingar – sýni síðuna án þeirra");render();}
+  }
+  async function saveVerdict(it,verdict,reason){
+    const u=API+"?action=set&k="+encodeURIComponent(KEY)+"&item="+encodeURIComponent(it.id)+"&verdict="+encodeURIComponent(verdict)+"&reason="+encodeURIComponent(reason)+"&by="+encodeURIComponent(state.who)+"&title="+encodeURIComponent(it.title||"");
+    const r=await fetch(u,{cache:"no-store"});const j=await r.json();
+    if(j.status!=="ok")throw new Error(j.message||j.status);
+    return j.ts;
+  }
+
+  // ---- filters
+  document.querySelectorAll("#f-verdict .chip").forEach(b=>b.addEventListener("click",()=>{state.fV=b.dataset.f;document.querySelectorAll("#f-verdict .chip").forEach(x=>x.setAttribute("aria-pressed",x===b));render();}));
+  document.querySelectorAll("#f-cat .chip").forEach(b=>b.addEventListener("click",()=>{state.fC=b.dataset.c;document.querySelectorAll("#f-cat .chip").forEach(x=>x.setAttribute("aria-pressed",x===b));render();}));
+
+  const verdictOf=id=>{const v=state.verdicts[id];return v&&v.verdict?v:null;};
+  const shown=()=>ITEMS.filter(it=>(it.score==null||it.score>=2));
+
+  function renderStats(){
+    const items=shown();
+    const dl=items.filter(it=>{const d=daysTo(it.deadline);return d!=null&&d>=0&&d<30;});
+    $("#st-total").textContent=items.length;
+    $("#st-open").textContent=items.filter(it=>!verdictOf(it.id)).length;
+    $("#st-yes").textContent=items.filter(it=>{const v=verdictOf(it.id);return v&&v.verdict==="ahugavert"}).length;
+    $("#st-dl").textContent=dl.length;
+    const dls=$("#deadlines"),ul=$("#dl-list");ul.innerHTML="";
+    const up=items.filter(it=>{const d=daysTo(it.deadline);return d!=null&&d>=0;}).sort((a,b)=>daysTo(a.deadline)-daysTo(b.deadline)).slice(0,8);
+    dls.hidden=up.length===0;
+    up.forEach(it=>{const li=el("li");const d=daysTo(it.deadline);const dd=el("span","num d",fmtDate(it.deadline));if(d<14)dd.style.color="var(--bad)";li.appendChild(dd);const a=el("a",null,it.title);a.href="#it-"+it.id;li.appendChild(a);const v=verdictOf(it.id);li.appendChild(el("span","meta",`${d} dagar${v?" · "+VLABEL[v.verdict]:""}`));ul.appendChild(li);});
+  }
+
+  function render(){
+    renderStats();
+    const list=$("#list");list.innerHTML="";
+    const items=shown().slice().sort((a,b)=>{const da=daysTo(a.deadline),db=daysTo(b.deadline);const ka=da!=null&&da>=0?da:9999,kb=db!=null&&db>=0?db:9999;if(ka!==kb)return ka-kb;return (b.score||0)-(a.score||0)||String(b.date||"").localeCompare(String(a.date||""));});
+    const vis=items.filter(it=>{const v=verdictOf(it.id);if(state.fV==="unmarked"&&v)return false;if(["ahugavert","skoda","ekki"].includes(state.fV)&&(!v||v.verdict!==state.fV))return false;if(state.fC!=="all"&&it.category!==state.fC)return false;return true;});
+    if(!vis.length){list.appendChild(el("div","empty",ITEMS.length?"Engin mál passa við síuna.":"Engin mál enn."));return;}
+    vis.forEach(it=>list.appendChild(card(it)));
+  }
+
+  function card(it){
+    const v=verdictOf(it.id);
+    const c=el("article","card");c.id="it-"+it.id;c.dataset.verdict=v?v.verdict:"";
+    const head=el("div","head");const left=el("div");left.appendChild(el("h3",null,it.title));
+    const tags=el("div","tags");
+    tags.appendChild(el("span","tag cat",CATS[it.category]||it.category||"Annað"));
+    if(it.status==="closed")tags.appendChild(el("span","tag closed","Lokið / frestur liðinn"));
+    if(it.is_new)tags.appendChild(el("span","tag new","Nýtt"));
+    const sc=el("span","score");sc.title="Einkunn vaktarinnar "+(it.score??"–")+" af 3";for(let i=1;i<=3;i++){const d=el("i");if((it.score||0)>=i)d.classList.add("on");sc.appendChild(d);}tags.appendChild(sc);
+    if(it.score_reason)tags.appendChild(el("span","meta",it.score_reason));
+    left.appendChild(tags);head.appendChild(left);c.appendChild(head);
+
+    const body=el("div","body");const facts=el("div","facts");
+    const f=(k,val,warn)=>{const d=el("div","fact");d.appendChild(el("div","k",k));const vv=el("div","v"+(warn?" warnv":""),val);if(/\d/.test(String(val)))vv.classList.add("num");d.appendChild(vv);facts.appendChild(d);};
+    f("Seljandi / aðili",it.seller||"–");f("Staður",it.location||"–");
+    if(it.size_m2!=null)f("Stærð",fmt(it.size_m2)+" m²");
+    if(it.plot_m2!=null)f("Lóð",fmt(it.plot_m2)+" m²");
+    if(it.fasteignamat_mkr!=null)f("Fasteignamat",fmt(it.fasteignamat_mkr)+" m.kr.");
+    if(it.price)f("Verð / kjör",it.price);
+    if(it.price_per_m2_kr!=null)f("Kr/m²",fmt(it.price_per_m2_kr));
+    if(it.res_price_per_m2_kr!=null)f("Íbúðaverð svæðis kr/m²",fmt(it.res_price_per_m2_kr));
+    {const d=daysTo(it.deadline);f("Frestur",it.deadline?fmtDate(it.deadline)+(d!=null?(d<0?" (liðinn)":` (${d} d)`):""):"–",d!=null&&d>=0&&d<14);}
+    if(it.date)f("Dags. heimildar",fmtDate(it.date));
+    body.appendChild(facts);
+
+    const memo=el("div","memo");const paras=Array.isArray(it.memo)?it.memo:[];const open=state.expanded.has(it.id);
+    paras.forEach((p,i)=>{if(i>0&&!open)return;const pe=el("p");if(p&&typeof p==="object"){if(p.label)pe.appendChild(el("b",null,p.label+": "));pe.appendChild(document.createTextNode(p.text||""));}else pe.textContent=String(p);memo.appendChild(pe);});
+    if(paras.length>1){const m=el("button","more",open?"Fela umfjöllun":"Lesa alla umfjöllunina");m.addEventListener("click",()=>{open?state.expanded.delete(it.id):state.expanded.add(it.id);render();});memo.appendChild(m);}
+    if(it.verdict_line){const cls=/strax/i.test(it.verdict_line)?"straks":/ekki/i.test(it.verdict_line)?"ekki":"timi";memo.appendChild(el("div","verdict-line "+cls,"Mat vaktarinnar: "+it.verdict_line));}
+    body.appendChild(memo);
+    if(Array.isArray(it.sources)&&it.sources.length){const s=el("div","sources");it.sources.forEach(src=>{const u=safeUrl(src.url);if(!u)return;const a=el("a",null,src.label||new URL(u).hostname);a.href=u;a.target="_blank";a.rel="noopener";s.appendChild(a);});body.appendChild(s);}
+    if(it.similar)body.appendChild(el("div","meta","Minnir á: "+it.similar));
+    c.appendChild(body);
+
+    // ---- marking
+    const mark=el("div","mark");
+    const cur=el("div","cur");
+    if(v){cur.appendChild(el("b",null,VLABEL[v.verdict]||v.verdict));cur.appendChild(document.createTextNode(` · ${v.by||"?"} · ${fmtDate(v.ts)}${v.reason?" · "+v.reason:""}`));}
+    else cur.appendChild(el("span","meta","Ómerkt"));
+    mark.appendChild(cur);
+    const hist=state.history.filter(h=>h.item===it.id).slice(-6).reverse();
+    if(hist.length>1){const hd=el("div","hist");hist.slice(1).forEach(h=>{const line=el("div","h");line.appendChild(el("b",null,(VLABEL[h.verdict]||h.verdict||"afmerkt")));line.appendChild(document.createTextNode(` · ${h.by} · ${fmtDate(h.ts)}${h.reason?" · "+h.reason:""}`));hd.appendChild(line);});mark.appendChild(hd);}
+    const draft=state.drafts.get(it.id);
+    const pick={verdict:draft?draft.verdict:(v?v.verdict:null)};
+    const btns=el("div","btns");
+    let inp,save;
+    const setDraft=()=>{state.drafts.set(it.id,{verdict:pick.verdict,reason:inp.value});};
+    ["ahugavert","skoda","ekki"].forEach(k=>{const b=el("button","vbtn "+k,VLABEL[k]);b.setAttribute("aria-pressed",pick.verdict===k);b.addEventListener("click",()=>{pick.verdict=k;btns.querySelectorAll(".vbtn").forEach(x=>x.setAttribute("aria-pressed",x===b));save.disabled=false;setDraft();});btns.appendChild(b);});
+    mark.appendChild(btns);
+    const row=el("div","row");
+    inp=el("input");inp.type="text";inp.id="reason-"+it.id;inp.placeholder="Ástæða í einni línu";inp.maxLength=300;inp.value=draft?draft.reason:(v&&v.reason?v.reason:"");
+    save=el("button","save","Vista");save.disabled=!(draft&&draft.verdict);
+    inp.addEventListener("input",()=>{save.disabled=!pick.verdict;setDraft();});
+    row.appendChild(inp);row.appendChild(save);mark.appendChild(row);
+    const st=el("div","state","");mark.appendChild(st);
+    save.addEventListener("click",async()=>{
+      if(!pick.verdict)return;
+      if(!state.who){st.className="state err";st.textContent="Veldu nafnið þitt efst á síðunni fyrst.";whoSel.focus();return;}
+      if(!API){st.className="state err";st.textContent="Bakendi ekki tengdur enn.";return;}
+      save.disabled=true;st.className="state";st.textContent="Vista…";
+      try{
+        const ts=await saveVerdict(it,pick.verdict,inp.value.trim());
+        state.verdicts[it.id]={verdict:pick.verdict,reason:inp.value.trim(),by:state.who,ts:ts,title:it.title};
+        state.history.push({ts:ts,item:it.id,verdict:pick.verdict,reason:inp.value.trim(),by:state.who});
+        state.drafts.delete(it.id);
+        st.className="state ok";st.textContent="Vistað";
+        c.dataset.verdict=pick.verdict;
+        cur.textContent="";cur.appendChild(el("b",null,VLABEL[pick.verdict]));cur.appendChild(document.createTextNode(` · ${state.who} · ${fmtDate(ts)}${inp.value.trim()?" · "+inp.value.trim():""}`));
+        renderStats();
+      }catch(e){save.disabled=false;st.className="state err";st.textContent="Tókst ekki að vista: "+(e.message||"villa");}
+    });
+    c.appendChild(mark);
+    return c;
+  }
+
+  render();
+  loadVerdicts();
+  setInterval(loadVerdicts,120000);
+})();
+</script>
+</body>
+</html>

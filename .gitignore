@@ -1,0 +1,8 @@
+app.html
+content.json
+.passphrase
+.token
+.DS_Store
+__pycache__/
+apps-script/.clasp.json
+config.json

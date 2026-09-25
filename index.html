@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="is">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Tækifæravaktin</title>
+<style>
+body{margin:0;font-family:-apple-system,'Segoe UI',Arial,sans-serif;background:#0f1514;
+  color:#EAF1F8;display:flex;align-items:center;justify-content:center;min-height:100vh}
+.box{text-align:center;padding:40px;max-width:420px}
+h1{font-size:22px;letter-spacing:4px;color:#fff;margin:0 0 6px}
+.sub{color:#4fb797;font-size:14px;margin-bottom:30px}
+input{width:100%;padding:12px 14px;border-radius:10px;border:1px solid #2b3733;
+  background:#171f1d;color:#fff;font-size:16px;box-sizing:border-box}
+button{margin-top:14px;width:100%;padding:12px;border-radius:10px;border:none;
+  background:#0f6e5a;color:#fff;font-weight:700;font-size:15px;cursor:pointer}
+button:hover{background:#128c72}
+.err{color:#E58C86;font-size:13px;height:18px;margin-top:10px}
+.note{color:#5A6B7A;font-size:11.5px;margin-top:26px}
+</style>
+</head>
+<body>
+<div class="box">
+  <h1>TÆKIFÆRAVAKTIN</h1>
+  <div class="sub">Íslenskar fasteignir — tækifæri í fasteignaþróun og forgangsröðun · trúnaðarmál</div>
+  <form id="f">
+    <input type="password" id="p" placeholder="Aðgangsorð" autofocus autocomplete="current-password">
+    <button type="submit">Opna</button>
+  </form>
+  <div class="err" id="e"></div>
+  <div class="note">Aðgangsorðið er geymt á þessu tæki þar til því er læst neðst á síðunni.</div>
+</div>
+<script>
+"use strict";
+const b64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+async function decrypt(pass){
+  const r=await fetch('content.enc?v='+Date.now(),{cache:'no-store'});if(!r.ok)throw new Error('fetch');
+  const {salt,iv,data}=await r.json();
+  const km=await crypto.subtle.importKey('raw',new TextEncoder().encode(pass),'PBKDF2',false,['deriveKey']);
+  const key=await crypto.subtle.deriveKey({name:'PBKDF2',salt:b64(salt),iterations:300000,hash:'SHA-256'},
+    km,{name:'AES-GCM',length:256},false,['decrypt']);
+  const pt=await crypto.subtle.decrypt({name:'AES-GCM',iv:b64(iv)},key,b64(data));
+  return new TextDecoder().decode(pt);
+}
+async function open(pass,remember){
+  const html=await decrypt(pass);
+  if(remember){try{localStorage.setItem('vaktin_pass',pass);}catch(_){}}
+  document.open();document.write(html);document.close();
+}
+document.getElementById('f').addEventListener('submit',async ev=>{
+  ev.preventDefault();
+  const p=document.getElementById('p').value;
+  try{await open(p,true);}catch(_){document.getElementById('e').textContent='Rangt aðgangsorð.';}
+});
+(async()=>{
+  let p=null;try{p=localStorage.getItem('vaktin_pass');}catch(_){}
+  if(p){try{await open(p,false);}catch(_){try{localStorage.removeItem('vaktin_pass');}catch(_){}}}
+})();
+</script>
+</body>
+</html>
