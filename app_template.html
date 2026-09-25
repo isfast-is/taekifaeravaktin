@@ -102,6 +102,17 @@ header.top .sub{color:var(--muted);font-size:14px;margin-top:4px}
 footer{color:var(--muted);font-size:12px;margin-top:30px;max-width:68ch}
 footer button{text-decoration:underline;color:var(--muted);padding:0}
 @media (max-width:520px){header.top h1{font-size:28px}.card{padding:14px}.card h3{font-size:18px}}
+
+.about{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);margin-bottom:14px}
+.about summary{cursor:pointer;padding:10px 14px;font-weight:600;list-style:none;display:flex;justify-content:space-between;align-items:center}
+.about summary::-webkit-details-marker{display:none}
+.about summary::after{content:"+";color:var(--muted);font-weight:400}
+.about[open] summary::after{content:"–"}
+.about .txt{padding:0 16px 16px;max-width:72ch;color:var(--ink)}
+.about h4{font-size:13px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin:14px 0 4px;font-family:inherit}
+.about p{margin:0 0 8px}
+.about ul{margin:0 0 8px;padding-left:18px}
+.about li{margin:2px 0}
 </style>
 </head>
 <body>
@@ -125,6 +136,34 @@ footer button{text-decoration:underline;color:var(--muted);padding:0}
     <span class="sync" id="sync">Sæki merkingar…</span>
   </div>
   <div class="notice" id="notice" hidden></div>
+
+  <details class="about" id="about">
+    <summary>Hvernig vaktin vinnur</summary>
+    <div class="txt">
+      <p>Tækifæravaktin er sjálfvirk leit að tækifærum í fasteignaþróun sem Ísfast gæti boðið í, keypt, sótt um eða selt inn í, ásamt vinnusvæði þar sem við þrjú, Gunnar, Björn og Sveinn, merkjum málin og forgangsröðum.</p>
+      <h4>Hvað er leitað að</h4>
+      <p>Matið ræðst af gerð viðskiptanna, ekki af tegund eignar. Fimm gerðir komast inn:</p>
+      <ul>
+        <li><b>Opinber eftirspurn á leiguleið:</b> ríki, sveitarfélag, Isavia eða stofnun óskar eftir húsnæði sem einhver á að byggja og leigja, eða selur land eða hús. Hrein verktaka fyrir opinbera aðila telst ekki með.</li>
+        <li><b>Eignir sem ríki eða sveitarfélag selja</b>, frá 1.000 m², sérstaklega ef hægt er að leigja opinberri stofnun til baka.</li>
+        <li><b>Stórar eignir með umbreytingarmöguleika</b> á höfuðborgarsvæðinu, frá 3.000 m² hjá einkaaðilum, eða minni ef þær eru spil í stærri kapal.</li>
+        <li><b>Þróunarréttur:</b> lóðaúthlutanir, byggingarréttur og deiliskipulag sem opnar á um 30 íbúðir eða 5.000 m² eða meira.</li>
+        <li><b>Söluleið fyrir ráðgjöf og VBC-einingar:</b> hver sá sem byggir hjúkrunarheimili eða staðlað hótel, hvar sem er á landinu, meðan byggingarkerfi er óvalið.</li>
+      </ul>
+      <p>Hafnað er íbúðum, sérbýli, sumarhúsum og jörðum, atvinnuhúsnæði undir 1.000 m², leiguhúsnæði án þróunarvinkils og eignum þar sem lokamarkmiðið væri verslunarrekstur. Utan höfuðborgarsvæðis komast aðeins hjúkrunar- og heilbrigðishúsnæði og söluleiðin inn. Reglurnar eru í skjalinu „Tækifæravaktin – Leitarreglur“ sem Gunnar ritstýrir, og vaktin fer eftir því í hverri keyrslu.</p>
+      <h4>Hvar er leitað og hversu oft</h4>
+      <ul>
+        <li><b>Daglega kl. 06:45:</b> útboðsvefur ríkisins og FSRE, fréttir og auglýsingar FSRE og Stjórnarráðsins, auglýsingar Reykjavíkurborgar um lóðir og eignir, fréttir sveitarfélaganna á höfuðborgarsvæðinu og á Suðurnesjum, Árborg, Akranesi og Akureyri, Skipulagsgáttin, söluskrár fasteignasala fyrir atvinnuhúsnæði og lóðir, og fréttamiðlarnir vb.is, mbl.is, visir.is, ruv.is og heimildin.is.</li>
+        <li><b>Fundargerðir skipulagsmála</b> eru lesnar beint frá sveitarfélögunum, því fyrirspurn um byggingarrétt eða breytta notkun birtist þar mánuðum áður en nokkuð kemur í auglýsingu.</li>
+        <li><b>Á mánudögum</b> bætist við almenn vefleit til að grípa það sem skröpun missir af, til dæmis prentauglýsingar sem aðeins fréttist af óbeint, og allar söluskrár á síðunni eru staðfestar enn í gildi.</li>
+        <li><b>Mánaðarlega</b> er farið yfir merkingarnar okkar og tillögur að nýjum leitarreglum lagðar fyrir Gunnar.</li>
+      </ul>
+      <h4>Einkunn og umfjöllun</h4>
+      <p>Hvert mál fær einkunn frá 0 til 3. Þrjú stig þýðir að málið sést hér og Gunnar fær tölvupóst, tvö stig að það sést hér, eitt stig að það er geymt í földum lista og núll að því er hent. Opinber mótaðili hækkar mál um stig. Um hvert mál er skrifuð stutt umfjöllun í sex liðum: hvað er í boði, tölur með samanburði við íbúðaverð svæðisins úr kaupskrá HMS, skipulagsstaða, hvers vegna þetta gæti passað Ísfast, hver kæmi með í verkefnið, og niðurstaða. Mál sem lokast, seljast eða missa frest fara sjálfkrafa af síðunni.</p>
+      <h4>Merkingar</h4>
+      <p>Veldu nafnið þitt efst, merktu málið Áhugavert, Í skoðun eða Ekki áhugi, skrifaðu ástæðu í einni línu og vistaðu. Síðasta vistun gildir sem staða málsins, en hver vistun er geymd í sögu þess með nafni og dagsetningu, svo rök tapast ekki þótt einhver breyti stöðunni. Ástæðurnar eru það sem vaktin lærir af; ein setning um hvers vegna er verðmætari en hakið sjálft.</p>
+    </div>
+  </details>
 
   <section class="deadlines" id="deadlines" hidden>
     <h2>Frestir sem nálgast</h2>
