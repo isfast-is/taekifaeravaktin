@@ -6,3 +6,4 @@ content.json
 __pycache__/
 apps-script/.clasp.json
 config.json
+seed/
