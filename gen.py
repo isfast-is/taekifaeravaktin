@@ -32,7 +32,14 @@ for p in sorted(glob.glob(os.path.join(DATA, "docs", "*.update.json"))):
         with open(p) as f:
             items[base].update(json.load(f))
 
-shown = [d for d in items.values() if (d.get("score") or 0) >= 2]
+today = date.today().isoformat()
+def active(d):
+    if (d.get("score") or 0) < 2: return False
+    if d.get("status") == "closed": return False
+    dl = str(d.get("deadline") or "")
+    if len(dl) >= 10 and dl[:10] < today and dl[4] == "-": return False   # frestur liðinn
+    return True
+shown = [d for d in items.values() if active(d)]
 
 cfg = {}
 cfg_path = os.path.join(HERE, "config.json")
